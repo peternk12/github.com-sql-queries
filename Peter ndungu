@@ -1,0 +1,86 @@
+## Optimizing inventory and sales for a retail chain 
+## Load data using MySQL
+# products data
+# inventory data
+# orders data
+#overview of the data
+SELECT * FROM inventory
+
+SELECT * FROM orders 
+
+SELECT * FROM products
+
+# Revenue analysis
+
+    SELECT * ,
+     (Unit_Price * Quantity) AS Sales_Amount
+    FROM sales
+    ORDER BY Product_Id
+
+# INNER Join on sales table and products table
+## Calculate revenue
+## Calculate cost_of_sales
+## Calculate Profits
+
+    SELECT
+    sales.*,
+    (Unit_Price * Quantity) AS Sales_Amount, 
+    products.Product_Name, 
+    products.Product_Cost, 
+    products.Supplier,
+    (sales.Quantity * products.Product_Cost) AS Cost_of_Sales,
+    
+    ((Unit_Price * Quantity) - (sales.Quantity * products.Product_Cost)) AS Profit
+FROM 
+    sales
+INNER JOIN 
+    products
+ON 
+    sales.Product_Id = products.Product_Id;
+
+
+    SELECT sales.Sales_Id,
+    sales.Product_Id,
+    sales.Date,
+    sales.Unit_Price,
+    sales.Quantity,
+    inventory.Store_Name,
+    inventory.Quantity_Available,
+
+    (inventory.Quantity_Available - sales.Quantity) AS Remaining_Inventory,
+    CASE 
+        WHEN (inventory.Quantity_Available - sales.Quantity) < 0 THEN 0
+        ELSE (inventory.Quantity_Available - sales.Quantity)
+    END AS Adjusted_Inventory
+    
+    FROM sales
+
+    INNER JOIN
+    inventory
+
+    ON 
+    sales.Store_Id=inventory.Store_Id;
+
+    
+    
+
+    SELECT sales.*,
+
+     (Unit_Price * Quantity) AS Sales_Amount, 
+    inventory.Store_Name
+    
+    FROM sales
+
+    INNER JOIN
+    inventory
+
+    ON 
+    sales.Store_Id=inventory.Store_Id;
+
+SELECT * FROM orders;
+
+
+
+SELECT COUNT(DISTINCT customer_id) FROM orders;
+
+
